@@ -21,29 +21,27 @@ public class Main extends ReceiverAdapter {
 		try {
 			manager.start();
 		} catch (Exception e1) {
-			// TODO Auto-generated catch block
 			e1.printStackTrace();
 			System.exit(-1);
 		}
+		System.out.println("Nickname : ");
 		commandLineScanner = new Scanner(System.in);
 		manager.NICKNAME = commandLineScanner.nextLine();
 		boolean stopped = false;
 		while(!stopped ){
-			
+			System.out.println("connect [ip]\ndisconnect [ip]\nquit\nshow");
 			String readLine = commandLineScanner.nextLine();
 			if(readLine.startsWith("connect")){
 				try {
 					JChannel chatChannel = manager.joinChannel(readLine.substring(8));
 					chatChannel.setReceiver(main);
 				} catch (Exception e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			}else if(readLine.startsWith("disconnect")){
 				try {
 					manager.leaveChannel(readLine.substring(11));
 				} catch (Exception e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			}else if(readLine.startsWith("quit")){
@@ -51,14 +49,6 @@ public class Main extends ReceiverAdapter {
 			}else if(readLine.startsWith("show")){
 				manager.printState();
 			}else{
-//				for(JChannel chatChannel : manager.getChannelList()){
-//					try {
-//						chatChannel.send(chatChannel.getAddress(), ChatMessage.newBuilder().setMessage(manager.NICKNAME + ":" +readLine).build().toByteArray());
-//					} catch (Exception e) {
-//						// TODO Auto-generated catch block
-//						e.printStackTrace();
-//					}
-//				}
 				manager.send(readLine);
 			}
 		}
@@ -72,7 +62,6 @@ public class Main extends ReceiverAdapter {
 			ChatMessage chatMessage = ChatMessage.parseFrom(arg0.getBuffer());
 			System.out.println(arg0.getSrc().toString() + " " + chatMessage.getMessage());
 		} catch (InvalidProtocolBufferException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
